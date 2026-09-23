@@ -1,12 +1,16 @@
 (() => {
   'use strict';
   const chapters = window.STUDY_CHAPTERS;
+  const quizzes = window.STUDY_QUIZZES;
   const KEY = 'studyinghelper.v1';
   const allTopics = chapters.flatMap(c => c.topics);
   const validIds = new Set(allTopics.map(t => t.id));
+  const validChapterIds = new Set(chapters.map(c => String(c.id)));
+  const quizByChapter = new Map(quizzes.map(quiz => [quiz.id, quiz]));
   const $ = id => document.getElementById(id);
   const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  let state = {version:1, notes:{}, reviewed:[], lastTopic:null};
+  let state = {version:1, notes:{}, reviewed:[], lastTopic:null, quizScores:{}};
+  let quizAttempt = null;
   let storageBlocked = false;
   let notificationTimer;
   function notify(message, persistent = false) {
@@ -21,7 +25,15 @@
       notes[id] = value;
     }
     if (!data.reviewed.every(id => validIds.has(id))) throw Error('Invalid progress');
-    return {version:1, notes, reviewed:[...new Set(data.reviewed)], lastTopic: validIds.has(data.lastTopic) ? data.lastTopic : null};
+    const quizScores = {};
+    if (data.quizScores !== undefined) {
+      if (!data.quizScores || typeof data.quizScores !== 'object' || Array.isArray(data.quizScores)) throw Error('Invalid quiz scores');
+      for (const [id, value] of Object.entries(data.quizScores)) {
+        if (!validChapterIds.has(id) || !value || !Number.isInteger(value.highest) || value.highest < 0 || value.highest > 15 || !Number.isInteger(value.attempts) || value.attempts < 0) throw Error('Invalid quiz score');
+        quizScores[id] = {highest:value.highest, attempts:value.attempts};
+      }
+    }
+    return {version:1, notes, reviewed:[...new Set(data.reviewed)], lastTopic: validIds.has(data.lastTopic) ? data.lastTopic : null, quizScores};
   }
   try { const raw = localStorage.getItem(KEY); if (raw) state = validate(JSON.parse(raw)); }
   catch { storageBlocked = true; notify('Saved data could not be read. Your existing data has not been changed. Export new notes before closing, or restore a valid backup.', true); }
@@ -52,6 +64,10 @@
         } else if (note) state.notes[id] = note;
       }
       state.reviewed = [...new Set([...state.reviewed, ...incoming.reviewed])];
+      for (const [id, score] of Object.entries(incoming.quizScores)) {
+        const current = state.quizScores[id] || {highest:0, attempts:0};
+        state.quizScores[id] = {highest:Math.max(current.highest, score.highest), attempts:Math.max(current.attempts, score.attempts)};
+      }
       storageBlocked = false;
       if (save()) notify(`Backup restored. ${conflicts ? 'Different versions of notes were kept together.' : 'Your current notes were kept.'}`);
       render();
@@ -94,6 +110,59 @@
   }
   const topicUrl = (c,t) => `#accounting/${c.id}/${t.id}`;
   const reviewedCount = c => c.topics.filter(t => state.reviewed.includes(t.id)).length;
+  const quizScore = chapterId => state.quizScores[String(chapterId)] || {highest:0, attempts:0};
+  function shuffle(items) {
+    const result = [...items];
+    for (let i = result.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
+  }
+  function createQuizAttempt(chapterId) {
+    const source = quizByChapter.get(chapterId);
+    if (!source || source.questions.length < 15) throw Error(`Quiz data missing for Chapter ${chapterId}`);
+    return {
+      chapterId,
+      result:null,
+      questions:shuffle(source.questions).slice(0, 15).map(question => {
+        const options = shuffle(question.options.map((text, index) => ({text, correct:index === question.answer})));
+        return {prompt:question.prompt, options:options.map(option => option.text), answer:options.findIndex(option => option.correct)};
+      })
+    };
+  }
+  function chapterNav(chapter, activeId) {
+    const score = quizScore(chapter.id);
+    return `<details class="topic-nav" open><summary>IN THIS CHAPTER · ${chapter.topics.length} TOPICS + QUIZ</summary><nav aria-label="Chapter sections"><a class="topic-link quiz-link ${activeId==='quiz'?'active':''}" ${activeId==='quiz'?'aria-current="page"':''} href="#accounting/${chapter.id}/quiz"><span class="number">QZ</span><span>Chapter quiz<small>${score.attempts?`Highest ${score.highest}/15`:'15 randomized questions'}</small></span></a>${chapter.topics.map((topic,index)=>`<a class="topic-link ${topic.id===activeId?'active':''}" ${topic.id===activeId?'aria-current="page"':''} href="${topicUrl(chapter,topic)}"><span class="number">${state.reviewed.includes(topic.id)?'✓':String(index+1).padStart(2,'0')}</span><span>${escape(topic.title)}</span></a>`).join('')}</nav></details>`;
+  }
+  function renderQuiz(chapter) {
+    if (!quizAttempt || quizAttempt.chapterId !== chapter.id) quizAttempt = createQuizAttempt(chapter.id);
+    const result = quizAttempt.result;
+    const saved = quizScore(chapter.id);
+    document.title = `Chapter ${chapter.id} quiz — StudyingHelper`;
+    $('main').innerHTML = `<a class="back" href="#accounting">← All chapters</a><div class="eyebrow">ACCOUNTING / CHAPTER ${String(chapter.id).padStart(2,'0')}</div><h1 class="chapter-title">${escape(chapter.title)}</h1><div class="reader-layout">${chapterNav(chapter,'quiz')}<div class="reader"><section class="article quiz-intro"><div class="topic-counter">CHAPTER QUIZ · 15 QUESTIONS</div><h2>Test your understanding</h2><p class="lead">Questions and answer choices are shuffled for every attempt. Submit all 15 answers to receive your mark.</p>${result?`<div class="quiz-result" role="status"><div><span class="quiz-mark">${result.score}/15</span><div><strong>${Math.round(result.score/15*100)}% on this attempt</strong><br><span>Highest score: ${saved.highest}/15 · ${saved.attempts} ${saved.attempts===1?'attempt':'attempts'}</span>${result.newHigh?'<br><em>New highest score!</em>':''}</div></div><button class="primary" id="retry-quiz" type="button">Redo quiz</button></div>`:`<div class="quiz-best"><strong>${saved.attempts?`Highest score: ${saved.highest}/15`:'No attempts yet'}</strong><span>${saved.attempts?`${saved.attempts} ${saved.attempts===1?'attempt':'attempts'} saved on this computer`:'Your highest score will be saved on this computer.'}</span></div>`}</section><form id="quiz-form" class="quiz-form">${quizAttempt.questions.map((question,index)=>`<fieldset class="quiz-question ${result?(result.answers[index]===question.answer?'is-correct':'is-wrong'):''}"><legend><span>${index+1}</span>${escape(question.prompt)}</legend><div class="quiz-options">${question.options.map((option,optionIndex)=>{const checked=result?.answers[index]===optionIndex; const correct=result&&question.answer===optionIndex; return `<label class="quiz-option ${correct?'correct-answer':''} ${result&&checked&&!correct?'wrong-answer':''}"><input type="radio" name="question-${index}" value="${optionIndex}" ${optionIndex===0&&!result?'required':''} ${checked?'checked':''} ${result?'disabled':''}><span>${escape(option)}</span>${correct?'<strong>Correct answer</strong>':''}</label>`;}).join('')}</div>${result&&result.answers[index]!==question.answer?`<p class="answer-note">Your answer was incorrect. The correct answer is <strong>${escape(question.options[question.answer])}</strong>.</p>`:''}</fieldset>`).join('')}<div class="quiz-submit">${result?'<button class="primary" id="retry-quiz-bottom" type="button">Try another order</button>':'<button class="primary" type="submit">Submit quiz</button>'}<a class="secondary" href="#accounting/${chapter.id}">Back to chapter notes</a></div></form></div></div>`;
+    if (result) {
+      const retry = () => { quizAttempt = createQuizAttempt(chapter.id); renderQuiz(chapter); window.scrollTo(0,0); };
+      $('retry-quiz').onclick = retry;
+      $('retry-quiz-bottom').onclick = retry;
+    } else {
+      $('quiz-form').onsubmit = event => {
+        event.preventDefault();
+        if (!event.target.reportValidity()) return;
+        const form = new FormData(event.target);
+        const answers = quizAttempt.questions.map((_, index) => Number(form.get(`question-${index}`)));
+        const score = answers.reduce((total, answer, index) => total + (answer === quizAttempt.questions[index].answer ? 1 : 0), 0);
+        const previous = quizScore(chapter.id);
+        const newHigh = !previous.attempts || score > previous.highest;
+        state.quizScores[String(chapter.id)] = {highest:Math.max(previous.highest, score), attempts:previous.attempts + 1};
+        save();
+        quizAttempt.result = {answers, score, newHigh};
+        renderQuiz(chapter);
+        window.scrollTo(0,0);
+      };
+    }
+    const active=document.querySelector('.topic-link.active'); const nav=document.querySelector('.topic-nav'); nav.scrollTop=Math.max(0,active.offsetTop-nav.offsetTop-70);
+  }
   function render() {
     const route = location.hash.slice(1).split('/');
     const course = route[0] === 'accounting';
@@ -109,11 +178,13 @@
     }
     const chapter = chapters.find(c=>String(c.id)===route[1]);
     if (!chapter) { renderCourse(); return; }
+    if (route[2] === 'quiz') { renderQuiz(chapter); return; }
+    quizAttempt = null;
     const topic = chapter.topics.find(t=>t.id===route[2]) || chapter.topics[0];
     const index=chapter.topics.indexOf(topic);
     state.lastTopic=topic.id; save();
     document.title=`${topic.title} — StudyingHelper`;
-    $('main').innerHTML=`<a class="back" href="#accounting">← All chapters</a><div class="eyebrow">ACCOUNTING / CHAPTER ${String(chapter.id).padStart(2,'0')}</div><h1 class="chapter-title">${escape(chapter.title)}</h1><div class="reader-layout"><details class="topic-nav" open><summary>IN THIS CHAPTER · ${chapter.topics.length} TOPICS</summary><nav aria-label="Chapter topics">${chapter.topics.map((t,i)=>`<a class="topic-link ${t.id===topic.id?'active':''}" ${t.id===topic.id?'aria-current="page"':''} href="${topicUrl(chapter,t)}"><span class="number">${state.reviewed.includes(t.id)?'✓':String(i+1).padStart(2,'0')}</span><span>${escape(t.title)}</span></a>`).join('')}</nav></details><div class="reader"><article class="article"><div class="topic-counter">TOPIC ${String(index+1).padStart(2,'0')} / ${chapter.topics.length}</div><h2>${escape(topic.title)}</h2><div class="prose">${topic.format==='markdown'?markdown(topic.body):topic.body.split(/\n\n+/).filter(Boolean).map(p=>`<p>${escape(p).replace(/\n/g,'<br>')}</p>`).join('')}${!topic.body.trim()?'<p>This topic is illustrated in the original slides. Open the chapter slides below to view the example.</p>':''}</div><div class="source-small">${escape(topic.source)}${topic.slides?` · Slides ${topic.slides.join(', ')}<br>Slide text is included here. Consult the original slides for visual examples and diagrams. <a href="${chapter.deck}" download>Download chapter slides</a>`:''}</div><div class="reader-actions"><label class="review-control"><input id="reviewed" type="checkbox" ${state.reviewed.includes(topic.id)?'checked':''}> Mark as reviewed</label><span class="meta" id="chapter-progress">${reviewedCount(chapter)} of ${chapter.topics.length} reviewed</span></div></article><section class="personal"><div class="personal-head"><label for="personal-note">Your notes</label><span class="save-status" id="save-status" role="status">${storageBlocked?'Not saved':'Saved on this computer'}</span></div><textarea id="personal-note" placeholder="Add an explanation in your own words, a question, or an example…">${escape(state.notes[topic.id]||'')}</textarea></section><nav class="pagination" aria-label="Topic navigation">${index>0?`<a class="secondary" href="${topicUrl(chapter,chapter.topics[index-1])}">← Previous topic</a>`:'<span></span>'}${index<chapter.topics.length-1?`<a class="primary" href="${topicUrl(chapter,chapter.topics[index+1])}">Next topic →</a>`:chapter.id<12?`<a class="primary" href="#accounting/${chapter.id+1}">Next chapter →</a>`:'<a class="primary" href="#accounting">All chapters →</a>'}</nav></div></div>`;
+    $('main').innerHTML=`<a class="back" href="#accounting">← All chapters</a><div class="eyebrow">ACCOUNTING / CHAPTER ${String(chapter.id).padStart(2,'0')}</div><h1 class="chapter-title">${escape(chapter.title)}</h1><div class="reader-layout">${chapterNav(chapter,topic.id)}<div class="reader"><article class="article"><div class="topic-counter">TOPIC ${String(index+1).padStart(2,'0')} / ${chapter.topics.length}</div><h2>${escape(topic.title)}</h2><div class="prose">${topic.format==='markdown'?markdown(topic.body):topic.body.split(/\n\n+/).filter(Boolean).map(p=>`<p>${escape(p).replace(/\n/g,'<br>')}</p>`).join('')}${!topic.body.trim()?'<p>This topic is illustrated in the original slides. Open the chapter slides below to view the example.</p>':''}</div><div class="source-small">${escape(topic.source)}${topic.slides?` · Slides ${topic.slides.join(', ')}<br>Slide text is included here. Consult the original slides for visual examples and diagrams. <a href="${chapter.deck}" download>Download chapter slides</a>`:''}</div><div class="reader-actions"><label class="review-control"><input id="reviewed" type="checkbox" ${state.reviewed.includes(topic.id)?'checked':''}> Mark as reviewed</label><span class="meta" id="chapter-progress">${reviewedCount(chapter)} of ${chapter.topics.length} reviewed</span></div></article><section class="personal"><div class="personal-head"><label for="personal-note">Your notes</label><span class="save-status" id="save-status" role="status">${storageBlocked?'Not saved':'Saved on this computer'}</span></div><textarea id="personal-note" placeholder="Add an explanation in your own words, a question, or an example…">${escape(state.notes[topic.id]||'')}</textarea></section><nav class="pagination" aria-label="Topic navigation">${index>0?`<a class="secondary" href="${topicUrl(chapter,chapter.topics[index-1])}">← Previous topic</a>`:'<span></span>'}${index<chapter.topics.length-1?`<a class="primary" href="${topicUrl(chapter,chapter.topics[index+1])}">Next topic →</a>`:`<a class="primary" href="#accounting/${chapter.id}/quiz">Take chapter quiz →</a>`}</nav></div></div>`;
     if (topic.blocks) {
       const hasContent = topic.blocks.some(b => b.body.trim() || b.images.length || b.tables.length);
       if (hasContent) document.querySelector('.prose').innerHTML = topic.blocks.map(block =>
@@ -132,8 +203,9 @@
   }
   function renderCourse() {
     document.title='Accounting notes — StudyingHelper';
-    $('main').innerHTML=`<a class="back" href="#">← Study library</a><div class="course-head"><div><div class="eyebrow">YOUR INCLUDED STUDY GUIDE</div><h1>Accounting notes</h1><p class="lead">Choose a chapter, then explore its topics at your own pace.</p></div><div class="progress-block">${state.reviewed.length} of ${allTopics.length} topics reviewed<div class="progress" role="progressbar" aria-label="Study progress" aria-valuemin="0" aria-valuemax="${allTopics.length}" aria-valuenow="${state.reviewed.length}"><span style="width:${state.reviewed.length/allTopics.length*100}%"></span></div></div></div><div class="section-head"><h2>Chapters</h2><span class="count">01 — 12</span></div><div class="chapter-list">${chapters.map(c=>`<a class="chapter-card" href="#accounting/${c.id}"><span class="chapter-no">${String(c.id).padStart(2,'0')}</span><div><h3>${escape(c.title)}</h3><div class="meta">${c.topics.length} topics · ${reviewedCount(c)} reviewed</div></div><span class="chevron" aria-hidden="true">›</span></a>`).join('')}</div><p class="source-note"><strong>About these notes.</strong> Chapters 1–3 come from “Create Study Guide Notes.” Chapters 4–12 use the attached Libby, Eighth Canadian Edition slides because the accessible conversation text ends during Chapter 4. Topics in those chapters preserve the slide text and link to the original slides for diagrams and examples. Course terminology and the slides’ original reporting context are preserved.</p>`;
+    $('main').innerHTML=`<a class="back" href="#">← Study library</a><div class="course-head"><div><div class="eyebrow">YOUR INCLUDED STUDY GUIDE</div><h1>Accounting notes</h1><p class="lead">Choose a chapter to study its topics or take a randomized 15-question quiz.</p></div><div class="progress-block">${state.reviewed.length} of ${allTopics.length} topics reviewed<div class="progress" role="progressbar" aria-label="Study progress" aria-valuemin="0" aria-valuemax="${allTopics.length}" aria-valuenow="${state.reviewed.length}"><span style="width:${state.reviewed.length/allTopics.length*100}%"></span></div></div></div><div class="section-head"><h2>Chapters</h2><span class="count">01 — 12</span></div><div class="chapter-list">${chapters.map(c=>{const score=quizScore(c.id);return `<div class="chapter-card"><a class="chapter-main" href="#accounting/${c.id}"><span class="chapter-no">${String(c.id).padStart(2,'0')}</span><div><h3>${escape(c.title)}</h3><div class="meta">${c.topics.length} topics · ${reviewedCount(c)} reviewed</div></div></a><a class="quiz-shortcut" href="#accounting/${c.id}/quiz"><strong>Quiz</strong><span>${score.attempts?`Highest ${score.highest}/15`:'15 questions'}</span></a></div>`;}).join('')}</div><p class="source-note"><strong>About these notes.</strong> Chapters 1–3 come from “Create Study Guide Notes.” Chapters 4–12 use the attached Libby, Eighth Canadian Edition slides because the accessible conversation text ends during Chapter 4. Topics in those chapters preserve the slide text and link to the original slides for diagrams and examples. Course terminology and the slides’ original reporting context are preserved. Chapter quizzes use the referenced “Create Chapter Quiz Bank” conversation.</p>`;
   }
   window.addEventListener('hashchange',()=>{render();window.scrollTo(0,0);$('main').focus({preventScroll:true});});
   render();
 })();
+

@@ -1,0 +1,5 @@
+scripts/source-input.json
+scripts/slides-extracted.json
+scripts/chapters-extracted.json
+test-output/
+node_modules/

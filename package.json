@@ -1,0 +1,1 @@
+{"name":"studyinghelper","version":"1.0.0","private":true,"type":"module","scripts":{"start":"node server.mjs","check":"node --check website/app.js && node --check website/content.js && node --check server.mjs"}}

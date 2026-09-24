@@ -3,3 +3,5 @@ scripts/slides-extracted.json
 scripts/chapters-extracted.json
 test-output/
 node_modules/
+scripts/micro-source.json
+scripts/micro-pages.json

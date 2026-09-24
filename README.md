@@ -1,6 +1,6 @@
 # StudyingHelper
 
-A local study website with an included Financial Accounting guide, chapter and topic navigation, randomized chapter quizzes, personal notes, and review progress.
+A local study website with Accounting and Microeconomics guides, chapter and topic navigation, randomized chapter quizzes, personal notes, and review progress.
 
 ## Open the website
 
@@ -22,7 +22,15 @@ The bundled content contains 12 chapters and 375 topics, including 68 original v
 
 `website/content.js` contains the bundled chapter data and `website/quiz-data.js` contains the quiz bank. The scripts in `scripts/` document source extraction; their temporary input files are ignored because they contain machine-specific attachment paths.
 
-## Check syntax
+## Microeconomics
+
+The Microeconomics guide contains 5 chapters, 97 topics, and 130 multiple-choice questions. Each attempt samples 15 questions and shuffles the answer choices. The notes and Chapters 1–4 questions come from “Create Chapter Notes and Graphs.” The chat preview cuts off during the Chapter 5 notes and Chapter 4 answer key. The remaining Chapter 5 sections and its 25 supplemental questions were created from the attached Chapter 5 slides, and the remaining Chapter 4 answers were checked against the notes. These distinctions appear in the guide and quizzes.
+
+Original PDF slide figures are placed beside the related topics because the conversation's generated sandbox image files were unavailable. Chapter PDFs are bundled for reference. `website/microeconomics-data.js` holds the notes and questions; `website/courses.js` registers both courses. The source builder is `scripts/build-micro.py`.
+
+Accounting topic IDs and score keys remain unchanged. Microeconomics uses separate topic IDs and score keys in the same local backup, so existing Accounting notes, progress, scores, and backups remain compatible.
+
+## Validation
 
 Run `npm run check`.
 

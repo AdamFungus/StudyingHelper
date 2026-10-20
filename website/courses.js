@@ -9,6 +9,6 @@ window.STUDY_COURSES = [
     id: 'microeconomics', title: 'Microeconomics', shortTitle: 'Microeconomics',
     cover: 'Micro<br>economics', edition: 'Notes & practice questions',
     chapters: window.MICRO_CHAPTERS, quizzes: window.MICRO_QUIZZES,
-    sourceNote: 'Notes and Chapters 1–4 questions come from “Create Chapter Notes and Graphs.” The accessible chat ends during the Chapter 5 notes and Chapter 4 answer key. The remaining Chapter 5 notes and its 25 supplemental questions were created from the attached course slides; the remaining Chapter 4 answers were checked against the notes. Figures are from the original slides because the chat’s generated image files were unavailable. Each quiz draws 15 questions from its chapter bank.',
+    sourceNote: 'Notes for Chapters 1–5 and 7–8 come from “Create Chapter Notes and Graphs.” The earlier chat preview ends during the Chapter 5 notes and Chapter 4 answer key. The remaining Chapter 5 notes and its 25 supplemental questions were created from the attached course slides; the remaining Chapter 4 answers were checked against the notes. Chapters 7–8 use the questions and answer keys in the supplied EC120 practice quiz PDFs, with 30 questions per chapter. Chapters 1–5 use original slide figures. Chapter 7–8 diagrams are recreated illustrations of the relationships in the notes because the chat’s image downloads were unavailable. Each quiz draws 15 questions from its chapter bank.',
   },
 ];

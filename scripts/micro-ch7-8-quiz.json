@@ -1,0 +1,674 @@
+[
+  {
+    "id": 7,
+    "questions": [
+      {
+        "sourceQuestion": 1,
+        "prompt": "Which form of business organization has one owner-manager who is personally responsible for the firm's debts?",
+        "options": [
+          "Corporation",
+          "Ordinary partnership",
+          "Single proprietorship",
+          "Crown corporation"
+        ],
+        "answer": 2
+      },
+      {
+        "sourceQuestion": 2,
+        "prompt": "Two individuals jointly own a business, and both are personally responsible for all its debts. Which organizational structure best describes this business?",
+        "options": [
+          "Ordinary partnership",
+          "Limited partnership with two limited partners",
+          "Public corporation",
+          "Non-profit organization"
+        ],
+        "answer": 0
+      },
+      {
+        "sourceQuestion": 3,
+        "prompt": "Which statement correctly describes a limited partner in a limited partnership?",
+        "options": [
+          "They manage the business and have unlimited liability.",
+          "They own publicly traded shares.",
+          "They are personally liable for every debt the firm incurs.",
+          "They do not manage the business, and their liability is limited to their investment."
+        ],
+        "answer": 3
+      },
+      {
+        "sourceQuestion": 4,
+        "prompt": "Which type of corporation has shares traded on a stock exchange?",
+        "options": [
+          "Private corporation",
+          "Public corporation",
+          "Crown corporation",
+          "Ordinary partnership"
+        ],
+        "answer": 1
+      },
+      {
+        "sourceQuestion": 5,
+        "prompt": "A business is owned by the Canadian government and is directed by a state-appointed board. This is most likely a:",
+        "options": [
+          "Private corporation",
+          "Limited partnership",
+          "Crown corporation",
+          "Single proprietorship"
+        ],
+        "answer": 2
+      },
+      {
+        "sourceQuestion": 6,
+        "prompt": "A corporation raises $500,000 by issuing new shares to investors. This is an example of:",
+        "options": [
+          "Debt financing",
+          "Equity financing",
+          "Intermediate-product financing",
+          "Depreciation financing"
+        ],
+        "answer": 1
+      },
+      {
+        "sourceQuestion": 7,
+        "prompt": "A company borrows money by issuing bonds. What is the relationship between the bondholders and the firm?",
+        "options": [
+          "Bondholders are creditors, not owners.",
+          "Bondholders automatically become shareholders.",
+          "Bondholders become general partners.",
+          "Bondholders receive dividends instead of interest."
+        ],
+        "answer": 0
+      },
+      {
+        "sourceQuestion": 8,
+        "prompt": "Which of the following is an example of physical capital?",
+        "options": [
+          "A company's bank loan",
+          "Cash held for future purchases",
+          "Shares issued by a corporation",
+          "Machinery used to manufacture products"
+        ],
+        "answer": 3
+      },
+      {
+        "sourceQuestion": 9,
+        "prompt": "Which objective do economists generally assume firms pursue?",
+        "options": [
+          "Maximizing employee numbers",
+          "Maximizing total revenue regardless of cost",
+          "Maximizing economic profit",
+          "Maximizing the quantity of inputs used"
+        ],
+        "answer": 2
+      },
+      {
+        "sourceQuestion": 10,
+        "prompt": "A pizza restaurant purchases flour from another business to make pizzas. For the restaurant, the flour is:",
+        "options": [
+          "An intermediate product",
+          "A financial asset",
+          "A final consumer service",
+          "A dividend payment"
+        ],
+        "answer": 0
+      },
+      {
+        "sourceQuestion": 11,
+        "prompt": "What does the production function Q = f(L, K) describe?",
+        "options": [
+          "The relationship between price and quantity demanded",
+          "The maximum output produced from combinations of labour and capital",
+          "The relationship between tax revenue and output",
+          "The distribution of profits between owners and creditors"
+        ],
+        "answer": 1
+      },
+      {
+        "sourceQuestion": 12,
+        "prompt": "According to the Chapter 7 slides, depreciation of machinery is classified as:",
+        "options": [
+          "An implicit cost",
+          "An equity payment",
+          "A dividend",
+          "An explicit cost"
+        ],
+        "answer": 3
+      },
+      {
+        "sourceQuestion": 13,
+        "prompt": "A business owner gives up a job paying $65,000 annually to operate their own company. The forgone salary is:",
+        "options": [
+          "Total revenue",
+          "Depreciation",
+          "An implicit cost",
+          "A payment of interest"
+        ],
+        "answer": 2
+      },
+      {
+        "sourceQuestion": 14,
+        "prompt": "A firm's total revenue is $950,000 and its explicit costs are $570,000. What is its accounting profit?",
+        "options": [
+          "$380,000",
+          "$1,520,000",
+          "$950,000",
+          "$570,000"
+        ],
+        "answer": 0
+      },
+      {
+        "sourceQuestion": 15,
+        "prompt": "A firm earns $1,000,000 in revenue. Its explicit costs are $600,000 and implicit costs are $150,000. What is its economic profit?",
+        "options": [
+          "$400,000",
+          "$250,000",
+          "$850,000",
+          "$450,000"
+        ],
+        "answer": 1
+      },
+      {
+        "sourceQuestion": 16,
+        "prompt": "A firm earns $900,000 in revenue and incurs $650,000 in explicit costs and $250,000 in implicit costs. What is its economic profit?",
+        "options": [
+          "$250,000",
+          "$650,000",
+          "$900,000",
+          "$0"
+        ],
+        "answer": 3
+      },
+      {
+        "sourceQuestion": 17,
+        "prompt": "Which situation best represents production in the short run?",
+        "options": [
+          "A factory cannot change its plant size but can hire more workers.",
+          "A firm can change all its inputs and technology.",
+          "A firm can change every factor of production with no fixed factors.",
+          "A firm must invent new technology to change its output."
+        ],
+        "answer": 0
+      },
+      {
+        "sourceQuestion": 18,
+        "prompt": "A factory produces 72 units of output using 9 workers. What is the average product of labour?",
+        "options": [
+          "9 units",
+          "7 units",
+          "8 units",
+          "81 units"
+        ],
+        "answer": 2
+      },
+      {
+        "sourceQuestion": 19,
+        "prompt": "A factory produces 70 units with 5 workers and 88 units with 6 workers. What is the marginal product of the sixth worker?",
+        "options": [
+          "12 units",
+          "14 units",
+          "16 units",
+          "18 units"
+        ],
+        "answer": 3
+      },
+      {
+        "sourceQuestion": 20,
+        "prompt": "A factory's total product is shown below. Over which interval does marginal product decrease for the first time? Labour: 0, 1, 2, 3, 4 | Total product: 0, 4, 11, 19, 25",
+        "options": [
+          "From 0 to 1 worker",
+          "From 3 to 4 workers",
+          "From 1 to 2 workers",
+          "From 2 to 3 workers"
+        ],
+        "answer": 1
+      },
+      {
+        "sourceQuestion": 21,
+        "prompt": "If marginal product (MP) is greater than average product (AP), what happens to AP as more labour is added?",
+        "options": [
+          "AP increases.",
+          "AP decreases.",
+          "AP must remain constant.",
+          "Total product must decrease."
+        ],
+        "answer": 0
+      },
+      {
+        "sourceQuestion": 22,
+        "prompt": "At which point does the marginal product curve intersect the average product curve?",
+        "options": [
+          "Where marginal product equals zero",
+          "Where marginal product is below average product",
+          "Where total product is maximized",
+          "Where average product is maximized"
+        ],
+        "answer": 3
+      },
+      {
+        "sourceQuestion": 23,
+        "prompt": "A firm has total fixed costs of $150 and total variable costs of $370. What is total cost?",
+        "options": [
+          "$220",
+          "$370",
+          "$520",
+          "$150"
+        ],
+        "answer": 2
+      },
+      {
+        "sourceQuestion": 24,
+        "prompt": "A firm has fixed costs of $240 and produces 40 units. What is average fixed cost?",
+        "options": [
+          "$8",
+          "$10",
+          "$6",
+          "$4"
+        ],
+        "answer": 2
+      },
+      {
+        "sourceQuestion": 25,
+        "prompt": "A firm's total variable cost is $330 when it produces 55 units. What is average variable cost?",
+        "options": [
+          "$6",
+          "$3",
+          "$275",
+          "$18"
+        ],
+        "answer": 0
+      },
+      {
+        "sourceQuestion": 26,
+        "prompt": "A company produces 35 units at a total cost of $525. What is its average total cost?",
+        "options": [
+          "$17",
+          "$15",
+          "$490",
+          "$35"
+        ],
+        "answer": 1
+      },
+      {
+        "sourceQuestion": 27,
+        "prompt": "A firm's total cost is $700 when it produces 50 units and $760 when it produces 55 units. What is marginal cost over this output interval?",
+        "options": [
+          "$60 per unit",
+          "$14 per unit",
+          "$12 per unit",
+          "$10 per unit"
+        ],
+        "answer": 2
+      },
+      {
+        "sourceQuestion": 28,
+        "prompt": "If the price of a variable factor, such as labour, increases, what generally happens to a firm's short-run cost curves?",
+        "options": [
+          "Only total fixed cost increases.",
+          "Average fixed cost increases, but marginal cost stays unchanged.",
+          "Average total cost increases, but marginal cost stays unchanged.",
+          "Average total cost and marginal cost increase."
+        ],
+        "answer": 3
+      },
+      {
+        "sourceQuestion": 29,
+        "prompt": "A factory's monthly building rent increases, but rent does not depend on how much it produces. What happens to its short-run cost curves?",
+        "options": [
+          "ATC increases, but MC stays unchanged.",
+          "ATC and MC both increase.",
+          "ATC decreases, but MC stays unchanged.",
+          "MC increases, but ATC stays unchanged."
+        ],
+        "answer": 0
+      },
+      {
+        "sourceQuestion": 30,
+        "prompt": "According to Chapter 7, a firm is operating at its capacity output. Which statement is true at the minimum point of its smooth short-run ATC curve?",
+        "options": [
+          "Average fixed cost reaches its minimum.",
+          "Marginal product equals average product.",
+          "Average total cost is minimized, and MC intersects ATC.",
+          "Total cost equals zero."
+        ],
+        "answer": 2
+      }
+    ],
+    "source": "Questions and answer key from the supplied EC120 Chapter 7 Practice Quiz PDF."
+  },
+  {
+    "id": 8,
+    "questions": [
+      {
+        "sourceQuestion": 1,
+        "prompt": "A firm can produce 1,000 widgets using any of the following production techniques. Which technique is clearly technically inefficient? Technique A: 25 labour, 50 capital | B: 35 labour, 35 capital C: 50 labour, 25 capital | D: 30 labour, 60 capital",
+        "options": [
+          "Technique A",
+          "Technique B",
+          "Technique C",
+          "Technique D"
+        ],
+        "answer": 3
+      },
+      {
+        "sourceQuestion": 2,
+        "prompt": "Why does technical efficiency alone not guarantee that a firm is minimizing its costs?",
+        "options": [
+          "Technically efficient methods always produce different outputs.",
+          "Different technically efficient methods can have different costs depending on input prices.",
+          "Technically efficient methods always use equal quantities of labour and capital.",
+          "Technical efficiency requires all factors to have identical prices."
+        ],
+        "answer": 1
+      },
+      {
+        "sourceQuestion": 3,
+        "prompt": "Using these techniques for producing 1,000 widgets (A: 25 labour, 50 capital; B: 35 labour, 35 capital; C: 50 labour, 25 capital; D: 30 labour, 60 capital), suppose labour and capital each cost $10 per unit. Which technique minimizes total production cost?",
+        "options": [
+          "Technique B",
+          "Technique A",
+          "Technique C",
+          "Technique D"
+        ],
+        "answer": 0
+      },
+      {
+        "sourceQuestion": 4,
+        "prompt": "Using these techniques for producing 1,000 widgets (A: 25 labour, 50 capital; B: 35 labour, 35 capital; C: 50 labour, 25 capital; D: 30 labour, 60 capital), suppose labour costs $10 per unit and capital costs $5 per unit. Which technique minimizes cost?",
+        "options": [
+          "Technique B",
+          "Technique C",
+          "Technique A",
+          "Technique D"
+        ],
+        "answer": 2
+      },
+      {
+        "sourceQuestion": 5,
+        "prompt": "Using these techniques for producing 1,000 widgets (A: 25 labour, 50 capital; B: 35 labour, 35 capital; C: 50 labour, 25 capital; D: 30 labour, 60 capital), suppose labour costs $5 per unit and capital costs $10 per unit. Which technique minimizes cost?",
+        "options": [
+          "Technique D",
+          "Technique A",
+          "Technique B",
+          "Technique C"
+        ],
+        "answer": 3
+      },
+      {
+        "sourceQuestion": 6,
+        "prompt": "A company uses 12 units of labour costing $20 each and 4 units of capital costing $50 each. What is total expenditure on these two inputs?",
+        "options": [
+          "$440",
+          "$340",
+          "$640",
+          "$560"
+        ],
+        "answer": 0
+      },
+      {
+        "sourceQuestion": 7,
+        "prompt": "A firm has MP of labour = 24 and wage = $8; MP of capital = 36 and capital price = $9. At its current input combination, how should it adjust production to reduce cost while maintaining output?",
+        "options": [
+          "Use more labour and less capital.",
+          "Keep the existing input combination because costs are minimized.",
+          "Use more capital and less labour.",
+          "Reduce labour and capital by the same percentage."
+        ],
+        "answer": 2
+      },
+      {
+        "sourceQuestion": 8,
+        "prompt": "Which condition is necessary for a firm to minimize costs using labour and capital at an interior optimum?",
+        "options": [
+          "MP_L = MP_K",
+          "MP_L / p_L = MP_K / p_K",
+          "p_L = p_K",
+          "L = K"
+        ],
+        "answer": 1
+      },
+      {
+        "sourceQuestion": 9,
+        "prompt": "A firm currently has MP_L / p_L = 5 and MP_K / p_K = 2. Which adjustment moves the firm toward cost minimization, assuming it can substitute inputs while maintaining output?",
+        "options": [
+          "Increase capital and reduce labour.",
+          "Increase both inputs proportionally.",
+          "Keep the current combination because the ratios are positive.",
+          "Increase labour and reduce capital."
+        ],
+        "answer": 3
+      },
+      {
+        "sourceQuestion": 10,
+        "prompt": "Suppose wages rise substantially while the price of capital remains unchanged. According to the principle of substitution, what is a firm likely to do in the long run?",
+        "options": [
+          "Use relatively more labour.",
+          "Use relatively more capital.",
+          "Use exactly the same input combination regardless of prices.",
+          "Stop attempting to minimize production costs."
+        ],
+        "answer": 1
+      },
+      {
+        "sourceQuestion": 11,
+        "prompt": "Suppose the price of capital decreases while labour costs remain unchanged. What will a cost-minimizing firm generally do?",
+        "options": [
+          "Substitute relatively more capital for labour.",
+          "Substitute relatively more labour for capital.",
+          "Reduce the use of capital because it has become cheaper.",
+          "Continue with the original input combination regardless of costs."
+        ],
+        "answer": 0
+      },
+      {
+        "sourceQuestion": 12,
+        "prompt": "A firm has MP_L = 60 and p_L = $20; MP_K = 30 and p_K = $15. What change would move the firm toward cost minimization, assuming it can substitute inputs?",
+        "options": [
+          "Increase capital and reduce labour.",
+          "Increase both factors by the same amount.",
+          "Increase labour and reduce capital.",
+          "Keep the current combination because marginal products are positive."
+        ],
+        "answer": 2
+      },
+      {
+        "sourceQuestion": 13,
+        "prompt": "What does the long-run average cost (LRAC) curve represent?",
+        "options": [
+          "Average cost when all production factors are fixed",
+          "The lowest possible average cost for each output level when all inputs can vary",
+          "The firm's average fixed cost at every output level",
+          "The additional cost of producing one more unit"
+        ],
+        "answer": 1
+      },
+      {
+        "sourceQuestion": 14,
+        "prompt": "Why can a short-run average total cost (SRATC) curve never fall below the LRAC curve for the same technology and factor prices?",
+        "options": [
+          "SRATC includes no fixed costs.",
+          "SRATC always equals marginal cost.",
+          "LRAC measures the highest possible production cost.",
+          "LRAC represents the lowest attainable cost when all factors can be adjusted."
+        ],
+        "answer": 3
+      },
+      {
+        "sourceQuestion": 15,
+        "prompt": "What happens where a particular SRATC curve touches the LRAC curve?",
+        "options": [
+          "That plant size is optimal for producing that output level.",
+          "The firm must be producing zero output.",
+          "The firm's marginal cost must equal zero.",
+          "All possible plant sizes necessarily have equal costs."
+        ],
+        "answer": 0
+      },
+      {
+        "sourceQuestion": 16,
+        "prompt": "A firm needs to produce 100 units per day. Plant SRATC1 has ATC $12; SRATC2 has ATC $9; SRATC3 has ATC $11. Which plant should a cost-minimizing firm choose?",
+        "options": [
+          "SRATC1",
+          "SRATC3",
+          "SRATC2",
+          "All three are equally efficient in cost terms."
+        ],
+        "answer": 2
+      },
+      {
+        "sourceQuestion": 17,
+        "prompt": "A firm's LRAC curve slopes downward as output increases. What is the firm experiencing?",
+        "options": [
+          "Diseconomies of scale",
+          "Increasing average cost",
+          "Decreasing returns to scale",
+          "Economies of scale"
+        ],
+        "answer": 3
+      },
+      {
+        "sourceQuestion": 18,
+        "prompt": "A firm's LRAC curve rises as output increases. Which concept best explains this?",
+        "options": [
+          "Economies of scale",
+          "Diseconomies of scale",
+          "Constant returns to scale",
+          "Falling average production costs"
+        ],
+        "answer": 1
+      },
+      {
+        "sourceQuestion": 19,
+        "prompt": "A firm increases all its inputs by 20%, and output also increases by exactly 20%. What is the firm experiencing?",
+        "options": [
+          "Constant returns to scale",
+          "Increasing returns to scale",
+          "Decreasing returns to scale",
+          "Diminishing marginal product of one fixed input"
+        ],
+        "answer": 0
+      },
+      {
+        "sourceQuestion": 20,
+        "prompt": "A firm doubles all its inputs, and output triples. Which classification applies?",
+        "options": [
+          "Decreasing returns to scale",
+          "Constant returns to scale",
+          "Increasing returns to scale",
+          "Negative returns to scale"
+        ],
+        "answer": 2
+      },
+      {
+        "sourceQuestion": 21,
+        "prompt": "A firm increases all its inputs by 50%, but output increases by only 25%. What does this illustrate?",
+        "options": [
+          "Constant returns to scale",
+          "Increasing returns to scale",
+          "Economies of scale",
+          "Decreasing returns to scale"
+        ],
+        "answer": 3
+      },
+      {
+        "sourceQuestion": 22,
+        "prompt": "What is the minimum efficient scale (MES) of a firm?",
+        "options": [
+          "The output where marginal product is zero",
+          "The smallest output where LRAC reaches its minimum",
+          "The output where total revenue equals total cost",
+          "The largest output a firm could physically produce"
+        ],
+        "answer": 1
+      },
+      {
+        "sourceQuestion": 23,
+        "prompt": "A firm has the following LRAC at available outputs: Q=100: $10; Q=200: $8; Q=300: $8; Q=400: $9. What is the smallest output at which it achieves minimum LRAC?",
+        "options": [
+          "200 units",
+          "100 units",
+          "300 units",
+          "400 units"
+        ],
+        "answer": 0
+      },
+      {
+        "sourceQuestion": 24,
+        "prompt": "A firm is operating on a SRATC curve that lies above LRAC at its chosen output. What could it do in the long run?",
+        "options": [
+          "Increase its costs to reach LRAC.",
+          "Increase fixed costs without changing any inputs.",
+          "Adjust its plant size to produce the same output at lower average cost.",
+          "Eliminate the relationship between average cost and output."
+        ],
+        "answer": 2
+      },
+      {
+        "sourceQuestion": 25,
+        "prompt": "Which statement correctly describes production costs in the long run?",
+        "options": [
+          "All costs must be fixed.",
+          "All factors can vary, so there are no fixed-factor costs in the long-run decision.",
+          "Only labour costs can change.",
+          "Capital costs cannot change when output changes."
+        ],
+        "answer": 1
+      },
+      {
+        "sourceQuestion": 26,
+        "prompt": "What distinguishes the very long run from the long run?",
+        "options": [
+          "Firms have fewer available production techniques.",
+          "At least one factor must remain permanently fixed.",
+          "Technology is fixed in the very long run but not in the long run.",
+          "Technology itself can change in the very long run."
+        ],
+        "answer": 3
+      },
+      {
+        "sourceQuestion": 27,
+        "prompt": "Which of the following is NOT one of the three aspects of technological change identified in Chapter 8?",
+        "options": [
+          "New production techniques",
+          "Improved inputs",
+          "Changes in financing interest rates alone",
+          "New products"
+        ],
+        "answer": 2
+      },
+      {
+        "sourceQuestion": 28,
+        "prompt": "Why do economists describe technological change as endogenous to the economic system?",
+        "options": [
+          "Firms have incentives to invent and innovate in search of profits.",
+          "Technological innovation occurs only because of unpredictable outside events.",
+          "Firms have no influence over technological development.",
+          "Technology cannot change independently of the size of the labour force."
+        ],
+        "answer": 0
+      },
+      {
+        "sourceQuestion": 29,
+        "prompt": "A firm produces 720 units using 24 workers. What is its labour productivity measured as output per worker?",
+        "options": [
+          "24 units per worker",
+          "30 units per worker",
+          "696 units per worker",
+          "17,280 units per worker"
+        ],
+        "answer": 1
+      },
+      {
+        "sourceQuestion": 30,
+        "prompt": "Labour becomes more expensive. A firm spends several years developing a new automated production technique that substantially reduces its need for workers. Which response best describes this decision?",
+        "options": [
+          "Maintaining the original production technique",
+          "Increasing the use of labour relative to capital",
+          "Moving along an unchanged short-run production function",
+          "Innovating away from an expensive input"
+        ],
+        "answer": 3
+      }
+    ],
+    "source": "Questions and answer key from the supplied EC120 Chapter 8 Practice Quiz PDF. Shared production-technique data is repeated where needed so each question stands alone."
+  }
+]

@@ -82,6 +82,8 @@
     return raw.replace(/\\(?:text|mathrm)\{([^{}]*)\}/g,'$1')
       .replace(/\\Delta/g,'Δ').replace(/\\eta/g,'η').replace(/\\infty/g,'∞')
       .replace(/\\uparrow/g,' ↑ ').replace(/\\downarrow/g,' ↓ ').replace(/\\Rightarrow/g,' ⇒ ')
+      .replace(/\\Longleftrightarrow/g,' ⇔ ').replace(/\\rightarrow/g,' → ')
+      .replace(/\\leq/g,' ≤ ').replace(/\\geq/g,' ≥ ').replace(/\\pi/g,'π').replace(/\\quad/g,' ')
       .replace(/\\times/g,' × ').replace(/\\%/g,'%').replace(/_\{([^}]+)\}/g,'_$1');
   }
   function equation(raw) {
@@ -203,7 +205,7 @@
     if (topic.figures?.length) {
       document.querySelector('.prose').insertAdjacentHTML('beforeend', topic.figures.map(figure => `<figure class="source-figure"><a href="${figure.src}" target="_blank" rel="noopener"><img src="${figure.src}" alt="${escape(figure.alt)}" loading="lazy"></a><figcaption>${escape(figure.caption)} · Select to enlarge.</figcaption></figure>`).join(''));
     }
-    if (activeCourse.id === 'microeconomics') {
+    if (activeCourse.id === 'microeconomics' && chapter.deck) {
       document.querySelector('.source-small').insertAdjacentHTML('beforeend', `<br><a href="${chapter.deck}" target="_blank" rel="noopener">Open original chapter slides (PDF)</a>`);
     }
     if (topic.blocks) {
@@ -222,17 +224,28 @@
     };
     const active=document.querySelector('.topic-link.active'); const nav=document.querySelector('.topic-nav'); nav.scrollTop=Math.max(0,active.offsetTop-nav.offsetTop-70);
   }
+  function chapterRange(items) {
+    const ids = items.map(chapter => chapter.id).sort((a,b)=>a-b);
+    const ranges = [];
+    const label = id => String(id).padStart(2,'0');
+    for (let i=0;i<ids.length;i++) {
+      const first = ids[i];
+      while (i+1<ids.length && ids[i+1]===ids[i]+1) i++;
+      ranges.push(first===ids[i] ? label(first) : `${label(first)}–${label(ids[i])}`);
+    }
+    return ranges.join(', ');
+  }
   function renderLibrary() {
     const lastCourse = courses.find(course => course.chapters.some(chapter => chapter.topics.some(topic => topic.id === state.lastTopic)));
     const lastChapter = lastCourse?.chapters.find(chapter => chapter.topics.some(topic => topic.id === state.lastTopic));
     const lastTopic = lastChapter?.topics.find(topic => topic.id === state.lastTopic);
-    $('main').innerHTML = `<div class="eyebrow">A LITTLE PROGRESS, EVERY DAY</div><h1>Your study library.</h1><p class="lead">A place for your course notes, chapter by chapter.</p><div class="section-head"><h2>Study guides</h2><span class="count">${courses.length} guides</span></div><div class="library-guides">${courses.map((course,index) => `<div class="guide-card ${course.id}"><div class="book-cover" aria-hidden="true"><small>STUDY GUIDE / ${String(index+1).padStart(2,'0')}</small><div>${course.cover}</div><span>${escape(course.edition)}<br>Chapters 01–${String(course.chapters.length).padStart(2,'0')}</span></div><div class="card-content"><span class="pill">INCLUDED IN YOUR LIBRARY</span><h2>${escape(course.title)}</h2><p class="meta">${course.chapters.length} chapters · ${course.chapters.reduce((total,chapter)=>total+chapter.topics.length,0)} topics<br>${course.quizzes.reduce((total,quiz)=>total+quiz.questions.length,0)} practice questions</p><a href="#${course.id}" class="primary">View ${escape(course.title)} <span aria-hidden="true">→</span></a></div></div>`).join('')}</div>${lastTopic ? `<p class="local-notice">Pick up where you left off: <a href="#${lastCourse.id}/${lastChapter.id}/${lastTopic.id}"><strong>${escape(lastCourse.title)} · ${escape(lastTopic.title)} →</strong></a></p>` : ''}<p class="local-notice">Your personal notes, progress, and quiz scores save automatically in this browser. Export a backup to keep a separate copy; clearing browser data removes locally saved data.</p><div class="mobile-backups"><button class="secondary" id="mobile-export">Export data</button><button class="secondary" id="mobile-import">Restore backup</button></div>`;
+    $('main').innerHTML = `<div class="eyebrow">A LITTLE PROGRESS, EVERY DAY</div><h1>Your study library.</h1><p class="lead">A place for your course notes, chapter by chapter.</p><div class="section-head"><h2>Study guides</h2><span class="count">${courses.length} guides</span></div><div class="library-guides">${courses.map((course,index) => `<div class="guide-card ${course.id}"><div class="book-cover" aria-hidden="true"><small>STUDY GUIDE / ${String(index+1).padStart(2,'0')}</small><div>${course.cover}</div><span>${escape(course.edition)}<br>Chapters ${chapterRange(course.chapters)}</span></div><div class="card-content"><span class="pill">INCLUDED IN YOUR LIBRARY</span><h2>${escape(course.title)}</h2><p class="meta">${course.chapters.length} chapters · ${course.chapters.reduce((total,chapter)=>total+chapter.topics.length,0)} topics<br>${course.quizzes.reduce((total,quiz)=>total+quiz.questions.length,0)} practice questions</p><a href="#${course.id}" class="primary">View ${escape(course.title)} <span aria-hidden="true">→</span></a></div></div>`).join('')}</div>${lastTopic ? `<p class="local-notice">Pick up where you left off: <a href="#${lastCourse.id}/${lastChapter.id}/${lastTopic.id}"><strong>${escape(lastCourse.title)} · ${escape(lastTopic.title)} →</strong></a></p>` : ''}<p class="local-notice">Your personal notes, progress, and quiz scores save automatically in this browser. Export a backup to keep a separate copy; clearing browser data removes locally saved data.</p><div class="mobile-backups"><button class="secondary" id="mobile-export">Export data</button><button class="secondary" id="mobile-import">Restore backup</button></div>`;
     $('mobile-export').onclick = exportData;
     $('mobile-import').onclick = () => $('backup-file').click();
   }
   function renderCourse() {
     document.title=`${activeCourse.title} — StudyingHelper`;
-    $('main').innerHTML=`<a class="back" href="#">← Study library</a><div class="course-head"><div><div class="eyebrow">YOUR INCLUDED STUDY GUIDE</div><h1>${escape(activeCourse.title)}</h1><p class="lead">Choose a chapter to study its topics or take a randomized 15-question quiz.</p></div><div class="progress-block">${allTopics.filter(topic => state.reviewed.includes(topic.id)).length} of ${allTopics.length} topics reviewed<div class="progress" role="progressbar" aria-label="Study progress" aria-valuemin="0" aria-valuemax="${allTopics.length}" aria-valuenow="${allTopics.filter(topic => state.reviewed.includes(topic.id)).length}"><span style="width:${allTopics.filter(topic => state.reviewed.includes(topic.id)).length/allTopics.length*100}%"></span></div></div></div><div class="section-head"><h2>Chapters</h2><span class="count">01 — ${String(chapters.length).padStart(2,'0')}</span></div><div class="chapter-list">${chapters.map(c=>{const score=quizScore(c.id);return `<div class="chapter-card"><a class="chapter-main" href="#${activeCourse.id}/${c.id}"><span class="chapter-no">${String(c.id).padStart(2,'0')}</span><div><h3>${escape(c.title)}</h3><div class="meta">${c.topics.length} topics · ${reviewedCount(c)} reviewed</div></div></a><a class="quiz-shortcut" href="#${activeCourse.id}/${c.id}/quiz"><strong>Quiz</strong><span>${score.attempts?`Highest ${score.highest}/15`:'15 questions'}</span></a></div>`;}).join('')}</div><p class="source-note"><strong>About these notes.</strong> ${escape(activeCourse.sourceNote)}</p>`;
+    $('main').innerHTML=`<a class="back" href="#">← Study library</a><div class="course-head"><div><div class="eyebrow">YOUR INCLUDED STUDY GUIDE</div><h1>${escape(activeCourse.title)}</h1><p class="lead">Choose a chapter to study its topics or take a randomized 15-question quiz.</p></div><div class="progress-block">${allTopics.filter(topic => state.reviewed.includes(topic.id)).length} of ${allTopics.length} topics reviewed<div class="progress" role="progressbar" aria-label="Study progress" aria-valuemin="0" aria-valuemax="${allTopics.length}" aria-valuenow="${allTopics.filter(topic => state.reviewed.includes(topic.id)).length}"><span style="width:${allTopics.filter(topic => state.reviewed.includes(topic.id)).length/allTopics.length*100}%"></span></div></div></div><div class="section-head"><h2>Chapters</h2><span class="count">${chapterRange(chapters)}</span></div><div class="chapter-list">${chapters.map(c=>{const score=quizScore(c.id);return `<div class="chapter-card"><a class="chapter-main" href="#${activeCourse.id}/${c.id}"><span class="chapter-no">${String(c.id).padStart(2,'0')}</span><div><h3>${escape(c.title)}</h3><div class="meta">${c.topics.length} topics · ${reviewedCount(c)} reviewed</div></div></a><a class="quiz-shortcut" href="#${activeCourse.id}/${c.id}/quiz"><strong>Quiz</strong><span>${score.attempts?`Highest ${score.highest}/15`:'15 questions'}</span></a></div>`;}).join('')}</div><p class="source-note"><strong>About these notes.</strong> ${escape(activeCourse.sourceNote)}</p>`;
   }
   window.addEventListener('hashchange',()=>{render();window.scrollTo(0,0);$('main').focus({preventScroll:true});});
   render();

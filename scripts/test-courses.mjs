@@ -14,12 +14,29 @@ for (const file of ['content.js','quiz-data.js','microeconomics-data.js','course
 const courses=context.window.STUDY_COURSES;
 assert.equal(courses.length,2);
 const micro=courses[1];
-assert.equal(micro.chapters.length,5);
-assert.equal(micro.quizzes.reduce((n,q)=>n+q.questions.length,0),130);
+assert.deepEqual(Array.from(micro.chapters,c=>c.id),[1,2,3,4,5,7,8]);
+assert.deepEqual(Array.from(micro.quizzes,c=>c.id),[1,2,3,4,5,7,8]);
+assert.equal(micro.quizzes.reduce((n,q)=>n+q.questions.length,0),190);
+for(const id of [7,8]) assert.equal(micro.quizzes.find(q=>q.id===id).questions.length,30);
+// Verified against the numbered answer tables in the supplied PDFs.
+const suppliedKeys={
+  7:'C A D B C B A D C A B D C A B D A C D B A D C C A B C D A C',
+  8:'D B A C D A C B D B A C B D A C D B A C D B A C B D C A B D',
+};
+for(const id of [7,8]){
+  const questions=micro.quizzes.find(q=>q.id===id).questions;
+  assert.equal(questions.map(q=>'ABCD'[q.answer]).join(' '),suppliedKeys[id],'Imported keys must match the supplied PDFs');
+  assert.deepEqual(Array.from(questions,q=>q.sourceQuestion),Array.from({length:30},(_,i)=>i+1));
+}
+for(const number of [3,4,5]){
+  const question=micro.quizzes.find(q=>q.id===8).questions.find(q=>q.sourceQuestion===number);
+  assert.ok(!/Question 1\b/.test(question.prompt),'Sampled questions cannot rely on another question');
+  for(const technique of ['A: 25 labour, 50 capital','B: 35 labour, 35 capital','C: 50 labour, 25 capital','D: 30 labour, 60 capital']) assert.ok(question.prompt.includes(technique));
+}
 const allIds=courses.flatMap(c=>c.chapters.flatMap(ch=>ch.topics.map(t=>t.id)));
 assert.equal(new Set(allIds).size,allIds.length,'Topic IDs must not collide between courses');
 for(const chapter of micro.chapters){
-  assert.ok(fs.existsSync(new URL('../website/'+chapter.deck,import.meta.url)));
+  if(chapter.deck) assert.ok(fs.existsSync(new URL('../website/'+chapter.deck,import.meta.url)));
   for(const topic of chapter.topics){
     assert.ok(topic.body.trim(),topic.title);
     assert.ok(!/sandbox:|chatgpt-content-reference/.test(topic.body),'No unresolved chat references');
@@ -75,4 +92,36 @@ assert.equal(saved.quizScores['microeconomics:1'].highest,15,'A lower score must
 assert.equal(saved.quizScores['microeconomics:1'].attempts,2);
 assert.equal(api.validate(saved).quizScores['microeconomics:1'].highest,15,'Combined backups must validate');
 assert.ok(api.equation('\\frac{\\text{Value in given period}}{\\text{Value in base period}}\\times100').includes('(Value in given period) ÷ (Value in base period)'));
-console.log('Courses verified: content assets, 130 Microeconomics questions, answer shuffling, quiz grading/retries, legacy backups, and separate course data.');
+for(const id of [7,8]){
+  const chapter=micro.chapters.find(c=>c.id===id);
+  for(const topic of chapter.topics){
+    context.location.hash=`#microeconomics/${id}/${topic.id}`;api.render();
+    assert.ok(element('main').innerHTML.includes(topic.title));
+    assert.ok(!/\\(?:[A-Za-z]+|\[|\])/.test(element('main').innerHTML),'Chapter formulas should render without raw LaTeX');
+  }
+  element('personal-note').oninput({target:{value:`Chapter ${id} personal note`}});
+  element('reviewed').onchange({target:{checked:true}});
+  context.location.hash=`#microeconomics/${id}/quiz`;api.render();
+  assert.ok(element('main').innerHTML.includes('Bank: 30 questions.'));
+  const current=api.getAttempt();
+  assert.equal(current.questions.length,15);
+  assert.equal(new Set(current.questions.map(q=>q.prompt)).size,15);
+  for(const question of current.questions){
+    const original=micro.quizzes.find(q=>q.id===id).questions.find(q=>q.prompt===question.prompt);
+    assert.equal(question.options[question.answer],original.options[original.answer],'Chapter 7–8 answer shuffling must preserve the key');
+  }
+  submit(true);
+  element('retry-quiz').onclick();submit(false);
+  saved=JSON.parse(storage.get('studyinghelper.v1'));
+  assert.equal(saved.quizScores[`microeconomics:${id}`].highest,15);
+  assert.equal(saved.quizScores[`microeconomics:${id}`].attempts,2);
+  assert.equal(saved.quizScores['1'].highest,13);
+  assert.equal(saved.quizScores['microeconomics:1'].highest,15);
+  assert.equal(api.validate(saved).notes[chapter.topics.at(-1).id],`Chapter ${id} personal note`);
+  assert.ok(api.validate(saved).reviewed.includes(chapter.topics.at(-1).id));
+}
+context.location.hash='#';api.render();
+assert.ok(element('main').innerHTML.includes('Chapters 01–05, 07–08'),'Chapter ranges should preserve the gap before Chapter 7');
+context.location.hash='#microeconomics';api.render();
+assert.ok(element('main').innerHTML.includes('01–05, 07–08'));
+console.log('Courses verified: content assets, 190 Microeconomics questions, Chapter 7–8 routes/formulas/grading/retries/backups, answer shuffling, and separate course data.');

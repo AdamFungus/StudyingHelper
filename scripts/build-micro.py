@@ -1,5 +1,5 @@
 """Build Microeconomics from the retrieved chat and its attached course PDFs."""
-import json,re,pathlib
+import json,re,pathlib,subprocess
 import pypdfium2 as pdfium
 root=pathlib.Path(__file__).resolve().parents[1]
 data=json.loads((root/'scripts/micro-source.json').read_text(encoding='utf-8'))
@@ -72,3 +72,4 @@ assert len(chapters)==5 and len(quizzes)==5
 for q in quizzes: assert len(q['questions'])>=25
 (root/'website/microeconomics-data.js').write_text('window.MICRO_CHAPTERS = '+json.dumps(chapters,ensure_ascii=False)+';\nwindow.MICRO_QUIZZES = '+json.dumps(quizzes,ensure_ascii=False)+';\n',encoding='utf-8')
 print(json.dumps({'chapters':[(c['id'],len(c['topics'])) for c in chapters],'questions':[len(q['questions']) for q in quizzes],'topics':sum(len(c['topics']) for c in chapters)}))
+subprocess.run(['node',str(root/'scripts/build-micro-ch7-8.mjs')],check=True)
